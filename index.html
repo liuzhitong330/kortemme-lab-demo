@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive structural analysis of the Kortemme Lab's dynamic engineered protein I89.">
+  <title>Exploratory Analyses Inspired by the Kortemme Lab</title>
+  <style>
+    :root{--ink:#18202e;--muted:#667085;--line:#d9dee7;--paper:#fbfcff;--s1:#3b5ccc;--s2:#d64f86;--focus:#e3a008;--wash:#f2f5fb}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font:18px/1.64 Georgia,'Times New Roman',serif}
+    a{color:#294fb6}.page{max-width:760px;margin:auto;padding:52px 24px 76px}h1{font-size:1.72rem;line-height:1.18;margin:0 0 8px;letter-spacing:-.015em}h2{font-size:1.18rem;margin:2.7rem 0 .65rem}p{margin:.55rem 0 1rem}
+    .byline,.nav,.eyebrow,.control-row,.legend,.metric-label,figcaption,.readout,footer,.source-list{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+    .byline{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:28px}.nav{font-size:13px;display:flex;flex-wrap:wrap;gap:18px;border-block:1px solid var(--line);padding:10px 0;margin-bottom:30px}.nav a{text-decoration:none;color:#525e72}
+    .lede{font-size:1.04rem}.eyebrow{text-transform:uppercase;letter-spacing:.09em;color:#68738a;font-size:11px;font-weight:700}.experiment{border-left:3px solid var(--s1);padding-left:15px;margin:18px 0}.experiment h3{font-size:1.02rem;margin:3px 0 5px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;margin:16px 0 10px;box-shadow:0 8px 28px rgba(31,48,85,.05)}
+    .control-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13px;color:#4e596d;margin-bottom:10px}.control-row label{font-weight:650}.control-row input[type=range]{flex:1;min-width:180px;accent-color:var(--s2)}.control-row input[type=text]{border:1px solid #b8c1d2;background:white;border-radius:5px;padding:8px 10px;font:14px ui-sans-serif,system-ui;width:190px}.control-row button{border:0;border-radius:5px;background:#283d78;color:white;padding:9px 13px;font:13px ui-sans-serif,system-ui;cursor:pointer}
+    .state-label{font-weight:750;min-width:78px;text-align:right}.viz{width:100%;display:block}.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12px;color:#5d677a;margin-top:4px}.legend span:before{content:'';display:inline-block;width:11px;height:3px;background:var(--c);vertical-align:3px;margin-right:5px;border-radius:2px}.readout{font-size:13px;line-height:1.5;background:#edf1f8;border-radius:5px;padding:10px 12px;margin-top:12px}.readout b{color:#253c78}figcaption{font-size:12px;line-height:1.45;color:#70798a;margin-top:9px}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 8px}.metric{border-top:2px solid #aeb9cd;padding-top:8px}.metric-value{font:700 1.5rem/1.1 ui-sans-serif,system-ui;color:#243a70}.metric-label{font-size:12px;line-height:1.35;color:#6a7383;margin-top:4px}
+    .callout{background:#fff8e6;border-left:3px solid var(--focus);padding:13px 15px;margin:18px 0;font-size:.95rem}.source-list{font-size:13px;line-height:1.55;color:#4d586b;padding-left:20px}.source-list li{margin:.38rem 0}hr{border:0;border-top:1px solid var(--line);margin:2.8rem 0 0}footer{border-top:1px solid var(--line);margin-top:3rem;padding-top:18px;color:#717b8b;font-size:13px;line-height:1.55}
+    #tip{position:fixed;display:none;pointer-events:none;background:#101624;color:white;border-radius:5px;padding:7px 9px;font:12px/1.35 ui-sans-serif,system-ui;z-index:5;max-width:220px}.pill{display:inline-block;border:1px solid #d4b04f;background:#fff9dc;border-radius:999px;padding:1px 7px;font:11px ui-sans-serif,system-ui;color:#7a5a00}
+    @media(max-width:620px){body{font-size:17px}.page{padding:34px 17px 58px}.metrics{grid-template-columns:1fr}.metric{display:flex;align-items:baseline;gap:10px}.state-label{text-align:left}.panel{padding:12px}.nav{gap:12px}}
+  </style>
+</head>
+<body>
+<div id="tip"></div>
+<main class="page">
+  <h1>Exploratory Analyses Inspired by the Kortemme Lab</h1>
+  <div class="byline">Cathy Liu &nbsp;&middot;&nbsp; dynamic protein design &nbsp;&middot;&nbsp; cathyliu014@gmail.com<br>Prepared for the Kortemme Lab, UCSF &nbsp;&middot;&nbsp; personal exploratory project, July 2026</div>
+  <nav class="nav"><a href="#motivation">Motivation</a><a href="#morph">State morph</a><a href="#contacts">Contact rewiring</a><a href="#relevance">Relevance</a><a href="#methods">Methods</a></nav>
+
+  <p class="lede">The Kortemme Lab recently demonstrated that a de novo protein can be designed to occupy two distinct conformations rather than one static fold. I built a compact structural explorer around I89, an engineered calcium-binding protein from that study, to ask where its experimentally solved apo states diverge and how that motion rewires residue contacts.</p>
+  <p>The analysis compares the representative NMR models for apo I89 state 1 (PDB 9CIG) and state 2 (PDB 9CID). It is descriptive rather than a dynamics simulation: two experimentally observed structures are aligned, then read as snapshots of the conformational landscape.</p>
+
+  <hr id="motivation">
+  <h2>How it works</h2>
+  <p>I extracted the 90 shared C&alpha; atoms, aligned state 1 to state 2 with a Kabsch fit, and measured the displacement of each residue. I also built a coarse contact map using pairs closer than 8 &Aring;, excluding neighbors fewer than four residues apart in sequence. The two views connect global movement to local packing changes.</p>
+
+  <hr id="morph">
+  <h2>Analysis 1 - Morph between two observed states</h2>
+  <div class="experiment"><div class="eyebrow">Interactive structure trace</div><h3>Where does apo I89 move most?</h3><p>Move the slider between state 1 and state 2. Type a residue number, one-letter code plus number, or choose a suggestion to inspect its displacement.</p></div>
+  <figure class="panel">
+    <div class="control-row"><label for="stateSlider">Structure</label><input id="stateSlider" type="range" min="0" max="100" value="0"><span id="stateLabel" class="state-label">State 1</span></div>
+    <div class="control-row"><label for="residueSearch">Residue</label><input id="residueSearch" type="text" list="residueList" value="I89" autocomplete="off"><datalist id="residueList"></datalist><button id="inspectButton">Inspect</button></div>
+    <svg id="morphViz" class="viz" viewBox="0 0 680 430" role="img" aria-label="Morphing trace of two aligned I89 structures"></svg>
+    <div class="legend"><span style="--c:var(--s1)">state 1, 9CIG</span><span style="--c:var(--s2)">state 2, 9CID</span><span style="--c:var(--focus)">selected residue</span></div>
+    <div id="morphReadout" class="readout"></div>
+    <figcaption>Two-dimensional projection of aligned C&alpha; coordinates. The slider linearly interpolates between two experimental snapshots for visualization; it is not a simulated transition path.</figcaption>
+  </figure>
+  <div class="metrics"><div class="metric"><div class="metric-value">2.49 &Aring;</div><div class="metric-label">global C&alpha; RMSD across 90 residues</div></div><div class="metric"><div class="metric-value">6.58 &Aring;</div><div class="metric-label">mean shift across residues 68-74</div></div><div class="metric"><div class="metric-value">8.74 &Aring;</div><div class="metric-label">largest shift, at residue 73</div></div></div>
+
+  <hr id="contacts">
+  <h2>Analysis 2 - Locate contact rewiring</h2>
+  <div class="experiment"><div class="eyebrow">Residue contact profile</div><h3>Motion is concentrated, but its packing effects spread</h3><p>Bars above zero are contacts present only in state 2; bars below zero are contacts present only in state 1. Click any residue to connect the contact change back to the structural view.</p></div>
+  <figure class="panel">
+    <svg id="contactViz" class="viz" viewBox="0 0 680 340" role="img" aria-label="Residue-level contact gains and losses"></svg>
+    <div class="legend"><span style="--c:var(--s2)">state 2-only contacts</span><span style="--c:var(--s1)">state 1-only contacts</span></div>
+    <div id="contactReadout" class="readout"></div>
+    <figcaption>Contacts use C&alpha; distance &lt; 8 &Aring; and sequence separation &ge; 4. A contact contributes to both residues in its pair.</figcaption>
+  </figure>
+  <div class="metrics"><div class="metric"><div class="metric-value">134</div><div class="metric-label">contacts shared by both states</div></div><div class="metric"><div class="metric-value">22 + 22</div><div class="metric-label">contacts unique to state 1 and state 2</div></div><div class="metric"><div class="metric-value">43.2%</div><div class="metric-label">of changed contacts touch residues 68-74</div></div></div>
+  <div class="callout"><strong>A focused structural lever:</strong> residues 68-74 are only 7 of the 90 analyzed positions, yet they average a 6.58 &Aring; displacement and participate in 19 of 44 state-specific contact changes. That makes this segment a compact place to connect design, biochemical validation, and higher-throughput mutational testing.</div>
+
+  <hr id="relevance">
+  <h2>Why this matters for the lab</h2>
+  <p>The specialist role connects computational protein design with yeast display, protein expression, purification, and biochemical assays. This explorer frames an experimentally tractable loop: prioritize positions from structural displacement and contact rewiring, design a focused mutation panel, then test how expression, stability, ligand response, and state preference move together.</p>
+  <h2>What I would bring</h2>
+  <p>I would bring careful wet-lab execution from vaccine R&amp;D and analytical characterization, plus computational experience with Python, AlphaFold 3, ProteinMPNN, and biological data analysis. I am especially interested in helping carry designed sequences through reproducible protein-production and assay workflows, then using the resulting data to sharpen the next design round.</p>
+
+  <hr id="methods">
+  <h2>Methods and limitations</h2>
+  <p>This is a reanalysis of public structures, not a claim about an unobserved mechanism. Model 1 from each NMR ensemble was used, and all shared C&alpha; atoms were included in the global alignment. The 8 &Aring; contact threshold is a coarse structural summary; atom-level hydrogen bonds, side-chain packing, ensemble uncertainty, calcium binding, and transition kinetics require dedicated analyses and experiments.</p>
+  <ul class="source-list">
+    <li><a href="https://doi.org/10.1126/science.adr7094">Guo et al., Science 2025</a> - deep learning-guided design of dynamic proteins.</li>
+    <li><a href="https://www.rcsb.org/structure/9CIG">PDB 9CIG</a> - apo I89, state 1; <a href="https://www.rcsb.org/structure/9CID">PDB 9CID</a> - apo I89, state 2.</li>
+    <li><a href="https://doi.org/10.5061/dryad.m37pvmdbm">Dryad dataset</a> and <a href="https://github.com/amyguo1997/dynamic_protein_design">author GitHub repository</a> - deposited data and analysis scripts.</li>
+  </ul>
+  <footer>Cathy Liu &nbsp;&middot;&nbsp; cathyliu014@gmail.com &nbsp;&middot;&nbsp; 415-216-3799<br>MSc Biotechnology, University of Melbourne &nbsp;&middot;&nbsp; protein biochemistry, Python, computational biology</footer>
+</main>
+<script src="data.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
